@@ -8,12 +8,8 @@ TODO: Write this
 - `git`
 - [Docker Desktop/Engine](https://docs.docker.com/get-started/get-docker/)
 - [Visual Studio Code](https://code.visualstudio.com/download)
-    - Download the follwing extensions: 
-    1. [Remote-SSH](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh)
-    2. [Remote Explorer](https://marketplace.visualstudio.com/items?itemName=ms-vscode.remote-explorer)
-    3. [Docker](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker)
-    4. [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
-    5. [C/C++](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools)
+    - After VSC is downloaded, download this extension: [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+
 
 2. Clone the Repository and Open in Visual Studio Code.
 ```bash

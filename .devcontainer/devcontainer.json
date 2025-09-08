@@ -15,6 +15,9 @@
         }
     }
     },
+    "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+    },
 
     "postCreateCommand": "echo 'Welcome to the TUAS Tutorial'"
 }
