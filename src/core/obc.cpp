@@ -15,6 +15,10 @@ OBC::OBC() {
     // 3. Set this as the starting tick in the MissionState.
     //    This is analogous to the real project's setup.
     this->state->setInitialTick(initial_tick);
+
+    // 4. Instantiate the GCS server, which will start in its own thread.
+    // We pass it the port number and the shared state object.
+    this->gcs_server = std::make_unique<GCSServer>(5010, this->state);
 }
 
 void OBC::run() {

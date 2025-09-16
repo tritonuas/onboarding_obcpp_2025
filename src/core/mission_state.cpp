@@ -15,10 +15,14 @@ MissionState::~MissionState() {
     }
 }
 
+
 void MissionState::setInitialTick(Tick* first_tick) {
     this->current_tick = first_tick;
     if (this->current_tick != nullptr) {
-        std::cout << "Transitioning to initial tick." << std::endl;
+        // Lock the mutex before writing to shared data
+        std::lock_guard<std::mutex> lock(state_mut);
+        this->current_tick_name = "MissionPrepTick"; // Manually set the name
+        std::cout << "Transitioning to initial tick: " << this->current_tick_name << std::endl;
         this->current_tick->init();
     }
 }
@@ -37,6 +41,11 @@ std::chrono::milliseconds MissionState::doTick() {
 
         delete current_tick;
         current_tick = next_tick;
+
+        // Lock the mutex before writing to shared data
+        std::lock_guard<std::mutex> lock(state_mut);
+        this->current_tick_name = "CompletionTick";
+        std::cout << "Transitioning to new tick: " << this->current_tick_name << std::endl;
         current_tick->init();
     }
     // If next_tick was nullptr, we do nothing and stay in the current state.
