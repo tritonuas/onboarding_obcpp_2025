@@ -13,9 +13,9 @@ DEF_GCS_HANDLE(Get, status) {
         // Lock the mutex to safely read from the shared MissionState
         std::lock_guard<std::mutex> lock(state->state_mut);
         status_proto.set_current_tick_name(state->current_tick_name);
-        status_proto.set_is_prepared(state->is_prepared);
-        status_proto.set_task_progress(state->task_progress);
-    } // Mutex is automatically unlocked here
+        status_proto.set_is_connected(state->is_prepared);
+        status_proto.set_mission_progress_percent(state->task_progress);
+    } 
 
     // Convert the Protobuf message to a JSON string
     std::string json_output;
