@@ -19,5 +19,6 @@
     "ghcr.io/devcontainers/features/github-cli:1": {}
     },
 
+    "forwardPorts": [5010, 5173, 8080],
     "postCreateCommand": "echo 'Welcome to the TUAS Tutorial'"
 }
