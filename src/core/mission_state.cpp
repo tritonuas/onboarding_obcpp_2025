@@ -2,10 +2,9 @@
 #include <iostream>
 
 MissionState::MissionState() : current_tick(nullptr) {
-    // Initialize our simplified state variables
     this->is_prepared = false;
-    this->task_progress = 0;
-    std::cout << "Mission State initialized." << std::endl;
+    this->task_progress = 0.0;
+    this->current_tick_name = "None";
 }
 
 MissionState::~MissionState() {
@@ -21,7 +20,7 @@ void MissionState::setInitialTick(Tick* first_tick) {
     if (this->current_tick != nullptr) {
         // Lock the mutex before writing to shared data
         std::lock_guard<std::mutex> lock(state_mut);
-        this->current_tick_name = "MissionPrepTick"; // Manually set the name
+        this->current_tick_name = current_tick->getName();
         std::cout << "Transitioning to initial tick: " << this->current_tick_name << std::endl;
         this->current_tick->init();
     }
@@ -44,7 +43,7 @@ std::chrono::milliseconds MissionState::doTick() {
 
         // Lock the mutex before writing to shared data
         std::lock_guard<std::mutex> lock(state_mut);
-        this->current_tick_name = "CompletionTick";
+        this->current_tick_name = current_tick->getName();
         std::cout << "Transitioning to new tick: " << this->current_tick_name << std::endl;
         current_tick->init();
     }

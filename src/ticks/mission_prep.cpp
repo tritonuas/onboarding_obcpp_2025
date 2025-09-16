@@ -4,7 +4,7 @@
 #include <iostream>
 
 MissionPrepTick::MissionPrepTick(std::shared_ptr<MissionState> state)
-    : Tick(state) {}
+    : Tick(state, TickID::MissionPrep) {}
 
 void MissionPrepTick::init() {
     std::cout << "Starting Mission Preparation..." << std::endl;
