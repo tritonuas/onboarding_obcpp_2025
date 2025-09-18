@@ -1,5 +1,6 @@
 #include "ticks/mission_prep.hpp"
 #include "core/mission_state.hpp"
+#include "ticks/camera.hpp"
 
 #include <iostream>
 
@@ -31,7 +32,7 @@ Tick* MissionPrepTick::tick() {
         state->is_prepared = true;
 
         // TODO: Add next tick switch
-        // return new ExecutionTick(state);
+        return new CameraTick(state); // added in to test
 
     } else {
         std::cout << "  - Preparing... (Current time: " << time_elapsed.count() << ")" << std::endl;
