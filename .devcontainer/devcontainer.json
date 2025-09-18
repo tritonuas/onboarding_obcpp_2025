@@ -1,24 +1,27 @@
 {
     "name": "TUAS Onboarding",
-    "build": {
-        "dockerfile": "Dockerfile"
-    },
+
+    "dockerComposeFile": "docker-compose.yml",
+
+    "service": "obc-dev",
+
+    "workspaceFolder": "/workspaces",
+
     "customizations": {
-    "vscode": {
-        "extensions": [
-        "ms-vscode.cpptools-extension-pack",
-        "ms-vscode.cmake-tools", 
-        "ms-azuretools.vscode-docker"
-        ],
-        "settings": {
-        "C_Cpp.default.compilerPath": "/usr/bin/g++"
+        "vscode": {
+            "extensions": [
+                "ms-vscode.cpptools-extension-pack",
+                "ms-vscode.cmake-tools",
+                "ms-azuretools.vscode-docker"
+            ],
+            "settings": {
+                "C_Cpp.default.compilerPath": "/usr/bin/g++"
+            }
         }
-    }
     },
     "features": {
-    "ghcr.io/devcontainers/features/github-cli:1": {}
+        "ghcr.io/devcontainers/features/github-cli:1": {}
     },
 
-    "forwardPorts": [5010, 5173, 8080],
     "postCreateCommand": "echo 'Welcome to the TUAS Tutorial'"
 }

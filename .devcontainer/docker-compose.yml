@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  gcs-dev:
+  obc-dev:
     build:
       context: .
       dockerfile: Dockerfile
@@ -10,7 +10,5 @@ services:
     
     ports:
       - "5010:5010"
-      - "5173:5173" 
-      - "8080:8080" 
 
     command: sleep infinity
