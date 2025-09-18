@@ -1,5 +1,5 @@
 {
-    "name": "TUAS Onboarding",
+    "name": "OBC Onboarding",
 
     "dockerComposeFile": "docker-compose.yml",
 
