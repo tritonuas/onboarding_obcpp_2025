@@ -22,16 +22,17 @@ code .
 3. Pull the Dev Container:
     1. In the bottom left of the screen, click on the remote window icon. It should look like two angle brackets next to each other. Also, you can instead press "Ctrl+Shift+P"
     2. Select (or type) reopen in container.
-    3. If successful, the bottom-left should say: `Dev Container: TUAS Onboarding`.
+    3. If successful, the bottom-left should say: `Dev Container: OBC Onboarding`.
 
 Now you are set up!!
 
 ## Usage:
 Most operations including building and running the project is done through the `Makefile`. Here are the main commands:
 
-1. `make` - runs the default build command.
-2. `make clean` - empties the build directory
+1. `make` or `make build` - runs the default build command.
+2. `make protos` - builds the protobuf files 
 3. `make run` - runs project / mission_runner
+4. `make clean` - empties the build directory
 
 ## Tests:
 To run unit tests, you can just run `make test`. For integration tests (requires manual verification), make sure you run `make build` first, then cd into `build/` and run `./testname`, where testname is the file of your test (without the .cpp extension).
