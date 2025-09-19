@@ -4,6 +4,19 @@ CXX = g++
 CXXFLAGS = -std=c++20 -Wall -I./deps -I./include -I./build/protos
 LDFLAGS = -lprotobuf -lpthread
 
+# gtest configs
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Darwin)
+GTEST_PREFIX ?= $(shell brew --prefix)/opt/googletest
+GTEST_INCLUDE ?= $(GTEST_PREFIX)/include
+GTEST_LIB_DIR ?= $(GTEST_PREFIX)/lib
+else
+# In the devcontainer, headers are in /usr/include and libs in /usr/local/lib
+GTEST_INCLUDE ?= /usr/include
+GTEST_LIB_DIR ?= /usr/local/lib
+endif
+GTEST_LDFLAGS = -L$(GTEST_LIB_DIR) -lgtest -lpthread
+
 BUILD_DIR = build
 PROTOS_DIR = protos
 PROTO_BUILD_DIR = $(BUILD_DIR)/protos
@@ -24,6 +37,14 @@ all: build
 build: $(EXECUTABLE)
 protos: $(PROTO_HEADER)
 
+TEST_SOURCES = $(wildcard tests/unit/*.cpp)
+TEST_OBJECTS = $(addprefix $(BUILD_DIR)/, $(notdir $(TEST_SOURCES:.cpp=.test.o)))
+TEST_EXECUTABLE = $(BUILD_DIR)/unit_tests
+
+test: $(TEST_EXECUTABLE)
+	@echo "Running unit tests..."
+	@$(TEST_EXECUTABLE)
+
 $(EXECUTABLE): $(OBJECTS) | $(BUILD_DIR)
 	@echo "Linking..."
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
@@ -32,6 +53,15 @@ $(EXECUTABLE): $(OBJECTS) | $(BUILD_DIR)
 $(BUILD_DIR)/%.o: %.cpp $(PROTO_HEADER) | $(BUILD_DIR)
 	@echo "Compiling $< -> $@"
 	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/%.test.o: tests/unit/%.cpp | $(BUILD_DIR)
+	@echo "Compiling test $< -> $@"
+	$(CXX) $(CXXFLAGS) -I$(GTEST_INCLUDE) -c $< -o $@
+
+$(TEST_EXECUTABLE): $(TEST_OBJECTS) | $(BUILD_DIR)
+	@echo "Linking unit tests..."
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(GTEST_LDFLAGS)
+	@echo "Unit test binary is at $(TEST_EXECUTABLE)"
 
 $(PROTO_BUILD_DIR)/%.pb.o: $(PROTO_BUILD_DIR)/%.pb.cc | $(PROTO_BUILD_DIR)
 	@echo "Compiling Protobuf source $< -> $@"
