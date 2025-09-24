@@ -4,6 +4,8 @@
 
 #include <memory>
 #include <chrono>
+#include <string> 
+#include <mutex> 
 #include "ticks/tick.hpp"
 
 class MissionState {
@@ -11,6 +13,10 @@ public:
     // Public state variables for ticks to interact with
     bool is_prepared = false;
     int task_progress = 0;
+    std::string current_tick_name;
+
+    // Mutex to protect shared data between the main loop and the server thread
+    std::mutex state_mut;
 
     MissionState();
     ~MissionState();

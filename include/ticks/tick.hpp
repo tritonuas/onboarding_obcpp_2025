@@ -4,13 +4,14 @@
 
 #include <chrono>
 #include <memory>
+#include "ticks/ids.hpp"
 
 class MissionState; 
 
 class Tick {
 public:
     // The constructor takes the shared state object
-    explicit Tick(std::shared_ptr<MissionState> state);
+    Tick(std::shared_ptr<MissionState> state, TickID id);
     virtual ~Tick() = default;
 
     // Called once when the state is transitioned to
@@ -22,8 +23,11 @@ public:
     // Controls how often tick() is called
     virtual std::chrono::milliseconds getWait() const = 0;
 
+    constexpr TickID getID() const { return this->id; }
+    constexpr const char* getName() const { return TICK_ID_TO_STR(this->id); }
 protected:
     std::shared_ptr<MissionState> state;
+    TickID id;
 };
 
 #endif // INCLUDE_TICKS_TICK_HPP_
