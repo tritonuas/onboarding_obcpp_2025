@@ -34,7 +34,9 @@ Most operations including building and running the project is done through the `
 3. `make run` - runs project / mission_runner
 4. `make clean` - empties the build directory
 
+
 ## Tests:
 To run unit tests, you can just run `make test`. For integration tests (requires manual verification), make sure you run `make build` first, then cd into `build/` and run `./testname`, where testname is the file of your test (without the .cpp extension).
 
 To add tests yourself, simply put them under `tests/unit` or `tests/integration`.
+
