@@ -36,7 +36,9 @@ Most operations including building and running the project is done through the `
 
 
 ## Tests:
-To run unit tests, you can just run `make test`. For integration tests (requires manual verification), make sure you run `make build` first, then cd into `build/` and run `./testname`, where testname is the file of your test (without the .cpp extension).
+To run unit tests, you can just run `make test`.
+
+For integration tests (requires manual verification), make sure you run `make integration` first to build the integration test targets, then cd into `build/` and run `./tests/testname`, where testname is the file of your test (without the .cpp extension).
 
 To add tests yourself, simply put them under `tests/unit` or `tests/integration`.
 

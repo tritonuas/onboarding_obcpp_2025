@@ -20,6 +20,7 @@ GTEST_LDFLAGS = -L$(GTEST_LIB_DIR) -lgtest -lpthread
 BUILD_DIR = build
 PROTOS_DIR = protos
 PROTO_BUILD_DIR = $(BUILD_DIR)/protos
+TEST_BUILD_DIR = $(BUILD_DIR)/tests
 EXECUTABLE = $(BUILD_DIR)/mission_runner
 
 SOURCES = $(wildcard src/*.cpp src/core/*.cpp src/ticks/*.cpp src/network/*.cpp)
@@ -39,13 +40,13 @@ build: $(EXECUTABLE)
 protos: $(PROTO_HEADER)
 
 TEST_SOURCES = $(wildcard tests/unit/*.cpp)
-TEST_OBJECTS = $(addprefix $(BUILD_DIR)/, $(notdir $(TEST_SOURCES:.cpp=.test.o)))
-TEST_EXECUTABLE = $(BUILD_DIR)/unit_tests
+TEST_OBJECTS = $(addprefix $(TEST_BUILD_DIR)/, $(notdir $(TEST_SOURCES:.cpp=.test.o)))
+TEST_EXECUTABLE = $(TEST_BUILD_DIR)/unit_tests
 
 # Integration test program(s)
 INTEG_SOURCES = $(wildcard tests/integration/*.cpp)
-INTEG_OBJECTS = $(addprefix $(BUILD_DIR)/, $(notdir $(INTEG_SOURCES:.cpp=.it.o)))
-INTEG_BINARIES = $(addprefix $(BUILD_DIR)/, $(notdir $(INTEG_SOURCES:.cpp=)))
+INTEG_OBJECTS = $(addprefix $(TEST_BUILD_DIR)/, $(notdir $(INTEG_SOURCES:.cpp=.it.o)))
+INTEG_BINARIES = $(addprefix $(TEST_BUILD_DIR)/, $(notdir $(INTEG_SOURCES:.cpp=)))
 
 test: $(TEST_EXECUTABLE)
 	@echo "Running unit tests..."
@@ -60,25 +61,25 @@ $(BUILD_DIR)/%.o: %.cpp $(PROTO_HEADER) | $(BUILD_DIR)
 	@echo "Compiling $< -> $@"
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-$(BUILD_DIR)/%.test.o: tests/unit/%.cpp | $(BUILD_DIR)
+$(TEST_BUILD_DIR)/%.test.o: tests/unit/%.cpp | $(TEST_BUILD_DIR)
 	@echo "Compiling test $< -> $@"
 	$(CXX) $(CXXFLAGS) -I$(GTEST_INCLUDE) -c $< -o $@
 
-$(BUILD_DIR)/%.it.o: tests/integration/%.cpp | $(BUILD_DIR)
+$(TEST_BUILD_DIR)/%.it.o: tests/integration/%.cpp | $(TEST_BUILD_DIR)
 	@echo "Compiling integration $< -> $@"
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-$(TEST_EXECUTABLE): $(TEST_OBJECTS) $(NON_MAIN_OBJECTS) | $(BUILD_DIR)
+$(TEST_EXECUTABLE): $(TEST_OBJECTS) $(NON_MAIN_OBJECTS) | $(TEST_BUILD_DIR) $(BUILD_DIR)
 	@echo "Linking unit tests..."
 	$(CXX) $(CXXFLAGS) -o $@ $(NON_MAIN_OBJECTS) $(TEST_OBJECTS) $(GTEST_LDFLAGS) $(LDFLAGS)
 	@echo "Unit test binary is at $(TEST_EXECUTABLE)"
 
 # Build all integration binaries
 integration: $(INTEG_BINARIES)
-	@echo "Integration binaries are in $(BUILD_DIR)"
+	@echo "Integration binaries are in $(TEST_BUILD_DIR)"
 
 # Pattern rule to link integration programs against non-main objects
-$(BUILD_DIR)/%: $(BUILD_DIR)/%.it.o $(NON_MAIN_OBJECTS) | $(BUILD_DIR)
+$(TEST_BUILD_DIR)/%: $(TEST_BUILD_DIR)/%.it.o $(NON_MAIN_OBJECTS) | $(TEST_BUILD_DIR) $(BUILD_DIR)
 	@echo "Linking integration $@..."
 	$(CXX) $(CXXFLAGS) -o $@ $(NON_MAIN_OBJECTS) $< $(LDFLAGS)
 
@@ -91,7 +92,7 @@ $(PROTO_HEADER) $(PROTO_SOURCE): $(PROTOS_DIR)/onboarding.proto | $(PROTO_BUILD_
 	protoc -I=$(PROTOS_DIR) --cpp_out=$(PROTO_BUILD_DIR) $<
 
 
-$(BUILD_DIR) $(PROTO_BUILD_DIR):
+$(BUILD_DIR) $(PROTO_BUILD_DIR) $(TEST_BUILD_DIR):
 	@mkdir -p $@
 
 # Utility Targets
