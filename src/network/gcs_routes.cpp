@@ -15,7 +15,7 @@ DEF_GCS_HANDLE(Get, status) {
         status_proto.set_current_tick_name(state->current_tick_name);
         status_proto.set_is_connected(state->is_prepared);
         status_proto.set_mission_progress_percent(state->task_progress);
-    } 
+    }
 
     // Convert the Protobuf message to a JSON string
     std::string json_output;
@@ -23,5 +23,13 @@ DEF_GCS_HANDLE(Get, status) {
 
     // Set the HTTP response
     response.set_content(json_output, "application/json");
+    response.status = 200;
+}
+
+DEF_GCS_HANDLE(Get, tickstate) {
+    TickID tickID = state->getTickID();
+    std::string tick_state = TICK_ID_TO_STR(tickID);
+
+    response.set_content(tick_state, mime::plaintext);
     response.status = 200;
 }
