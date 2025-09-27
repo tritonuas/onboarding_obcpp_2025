@@ -26,10 +26,10 @@ DEF_GCS_HANDLE(Get, status) {
     response.status = 200;
 }
 
-DEF_GCS_HANDLE(Get, tickstate) {
+DEF_GCS_HANDLE(Get, tick) {
     TickID tickID = state->getTickID();
     std::string tick_state = TICK_ID_TO_STR(tickID);
 
-    response.set_content(tick_state, mime::plaintext);
+    response.set_content(tick_state, "text/plain");
     response.status = 200;
 }
