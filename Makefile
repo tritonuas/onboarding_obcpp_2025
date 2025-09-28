@@ -1,7 +1,10 @@
 # Makefile for the OBCpp Onboarding Project
 
+OPENCV_CFLAGS = $(shell pkg-config --cflags opencv4)
+OPENCV_LIBS   = $(shell pkg-config --libs opencv4)
+
 CXX = g++
-CXXFLAGS = -std=c++20 -Wall -I./deps -I./include -I./build/protos
+CXXFLAGS = -std=c++20 -Wall -I./deps -I./include -I./build/protos $(OPENCV_CFLAGS)
 LDFLAGS = -lprotobuf -lpthread
 
 BUILD_DIR = build
@@ -9,7 +12,7 @@ PROTOS_DIR = protos
 PROTO_BUILD_DIR = $(BUILD_DIR)/protos
 EXECUTABLE = $(BUILD_DIR)/mission_runner
 
-SOURCES = $(wildcard src/*.cpp src/core/*.cpp src/ticks/*.cpp src/network/*.cpp)
+SOURCES = $(wildcard src/*.cpp src/core/*.cpp src/ticks/*.cpp src/network/*.cpp src/utilities/*.cpp src/camera/*.cpp)
 
 PROTO_HEADER = $(PROTO_BUILD_DIR)/onboarding.pb.h
 PROTO_SOURCE = $(PROTO_BUILD_DIR)/onboarding.pb.cc
@@ -17,7 +20,7 @@ PROTO_SOURCE = $(PROTO_BUILD_DIR)/onboarding.pb.cc
 OBJECTS = $(addprefix $(BUILD_DIR)/, $(notdir $(SOURCES:.cpp=.o)))
 OBJECTS += $(PROTO_BUILD_DIR)/onboarding.pb.o
 
-vpath %.cpp src src/core src/ticks src/network
+vpath %.cpp src src/core src/ticks src/network src/camera src/utilities
 
 # Build Targets
 all: build
