@@ -2,7 +2,7 @@
 #include <filesystem>
 #include "camera/mock.hpp"
 
-MockCamera::MockCamera() {
+MockCamera::MockCamera() : CameraInterface() {
     this->is_taking_pictures = false;
 }
 
@@ -11,8 +11,10 @@ MockCamera::~MockCamera() {
 }
 
 std::optional<ImageData> MockCamera::takePicture(const std::chrono::milliseconds& timeout) {
+    WriteLock lock(this->image_lock);
 
     auto start_time = std::chrono::steady_clock::now();
+    static int image_index = 0;
 
     std::filesystem::path image_dir_path = images_dir;
     
@@ -21,8 +23,8 @@ std::optional<ImageData> MockCamera::takePicture(const std::chrono::milliseconds
         entries.push_back(entry);
     }
 
-    // TODO: get a random image to load
-    cv::Mat captured_image = cv::imread(entries[0].path().string());
+    cv::Mat captured_image = cv::imread(entries[image_index].path().string());
+    image_index++; // 
 
     auto now = std::chrono::steady_clock::now();
 
@@ -57,8 +59,6 @@ void MockCamera::stopTakingPictures() {
 }
 
 void MockCamera::processCapturedImage(std::optional<ImageData> capturedImage) {
-    
-    WriteLock lock(this->image_lock);
 
     if (capturedImage.has_value()) {
         ImageData image = capturedImage.value();
