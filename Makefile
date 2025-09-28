@@ -27,9 +27,9 @@ all: build
 build: $(EXECUTABLE)
 protos: $(PROTO_HEADER)
 
-$(EXECUTABLE): $(OBJECTS) | $(BUILD_DIR)
+$(EXECUTABLE): $(OBJECTS) | $(BUILD_DIR) 
 	@echo "Linking..."
-	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS) $(OPENCV_CFLAGS)
 	@echo "Build complete. Executable is at $(EXECUTABLE)"
 
 $(BUILD_DIR)/%.o: %.cpp $(PROTO_HEADER) | $(BUILD_DIR)
