@@ -23,10 +23,6 @@ std::optional<ImageData> MockCamera::takePicture(const std::chrono::milliseconds
         entries.push_back(entry);
     }
 
-    cv::Mat captured_image = cv::imread(entries[image_index].path().string());
-    image_index++; // 
-
-
     return std::nullopt;
 }
 
