@@ -2,7 +2,7 @@
 #include <filesystem>
 #include "camera/mock.hpp"
 
-MockCamera::MockCamera() {
+MockCamera::MockCamera() : CameraInterface() {
     this->is_taking_pictures = false;
 }
 
@@ -11,20 +11,21 @@ MockCamera::~MockCamera() {
 }
 
 std::optional<ImageData> MockCamera::takePicture(const std::chrono::milliseconds& timeout) {
+    WriteLock lock(this->image_lock);
 
     auto start_time = std::chrono::steady_clock::now();
+    static int image_index = 0;
 
     // load the image
     std::filesystem::path image_dir_path = images_dir;
     
-    // this is probably a bad a way to do this
     std::vector<std::filesystem::directory_entry> entries;
     for (auto& entry : std::filesystem::directory_iterator(image_dir_path)) {
         entries.push_back(entry);
     }
 
-    // just takes the first entry
-    cv::Mat captured_image = cv::imread(entries[0].path().string());
+    cv::Mat captured_image = cv::imread(entries[image_index].path().string());
+    image_index++; // 
 
     auto now = std::chrono::steady_clock::now();
 
@@ -59,8 +60,6 @@ void MockCamera::stopTakingPictures() {
 }
 
 void MockCamera::processCapturedImage(std::optional<ImageData> capturedImage) {
-    
-    WriteLock lock(this->image_lock);
 
     if (capturedImage.has_value()) {
         ImageData image = capturedImage.value();

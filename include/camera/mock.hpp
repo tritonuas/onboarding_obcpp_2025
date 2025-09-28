@@ -15,7 +15,7 @@ const int DUMMY_TIMEOUT = 1000;
 const int IMAGE_COUNT = 5;
 const std::string images_dir = "/workspaces/onboarding_obcpp_2025/test/images/";
 
-class MockCamera {
+class MockCamera : public CameraInterface {
     public:
 
         MockCamera();
