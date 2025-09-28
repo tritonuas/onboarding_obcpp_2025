@@ -7,6 +7,7 @@
 #include <string> 
 #include <mutex> 
 #include "ticks/tick.hpp"
+#include <opencv2/opencv.hpp>
 
 class MissionState {
 public:
