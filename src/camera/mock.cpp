@@ -27,6 +27,7 @@ std::optional<ImageData> MockCamera::takePicture(const std::chrono::milliseconds
     image_index++; // 
 
 
+    return std::nullopt;
 }
 
 void MockCamera::startTakingPictures(const std::chrono::milliseconds& interval) {
@@ -44,7 +45,7 @@ void MockCamera::processCapturedImage(std::optional<ImageData> capturedImage) {
 }
 
 int MockCamera::getImageCount() {
-
+    return 0;
 }
 
 void MockCamera::captureInterval(const std::chrono::milliseconds& interval) {
