@@ -7,13 +7,13 @@ VerifyTick::VerifyTick(std::shared_ptr<MissionState> state)
     : Tick(state, TickID::Verify) {}
 
 void VerifyTick::init() {
-
+	state->image_state = MissionState::ImageState::WAITING;
 }
 
 
 Tick* VerifyTick::tick() {
 	// Enums are set in the gcs handler
-	
+
 	// Waiting for verification from handler
 	if (state->image_state == MissionState::ImageState::WAITING) {
 		return new VerifyTick(state);
