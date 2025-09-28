@@ -27,6 +27,18 @@ public:
     // Method for the OBC to set the very first tick
     void setInitialTick(Tick* first_tick);
 
+    // Whether we captured an image already
+    cv::Mat image;
+
+    // Enum to track the state of the image
+    enum ImageState : int {
+        WAITING = 0,
+        VALID = 1,
+        INVALID = 2
+    };
+
+    ImageState image_state = ImageState::WAITING;
+
 private:
     Tick* current_tick;
 };
