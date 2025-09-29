@@ -1,4 +1,5 @@
 #include "core/mission_state.hpp"
+
 #include <iostream>
 
 MissionState::MissionState() : current_tick(nullptr) {
@@ -13,7 +14,6 @@ MissionState::~MissionState() {
         delete current_tick;
     }
 }
-
 
 void MissionState::setInitialTick(Tick* first_tick) {
     this->current_tick = first_tick;
@@ -50,4 +50,9 @@ std::chrono::milliseconds MissionState::doTick() {
     // If next_tick was nullptr, we do nothing and stay in the current state.
 
     return current_tick->getWait();
+}
+
+TickID MissionState::getTickID() {
+    std::lock_guard<std::mutex> lock(state_mut);
+    return current_tick->getID();
 }
