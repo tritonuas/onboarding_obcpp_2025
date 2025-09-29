@@ -25,3 +25,16 @@ DEF_GCS_HANDLE(Get, status) {
     response.set_content(json_output, "application/json");
     response.status = 200;
 }
+
+DEF_GCS_HANDLE(Post, message) {
+    DetectedObject detected_object;
+    google::protobuf::util::JsonStringToMessage(request.body, &detected_object);
+
+    {
+        std::lock_guard<std::mutex> lock(state->state_mut);
+        state->last_detected_object = ODLCObjects_ID_TO_STR(detected_object);
+    }
+
+    response.set_content("{\"status\": \"received\"}", "application/json");
+    response.status = 200;
+}

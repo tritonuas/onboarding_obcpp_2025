@@ -7,5 +7,6 @@
 #include "network/gcs_macros.hpp"
 
 DEF_GCS_HANDLE(Get, status);
+DEF_GCS_HANDLE(Post, message);
 
 #endif // INCLUDE_NETWORK_GCS_ROUTES_HPP_
