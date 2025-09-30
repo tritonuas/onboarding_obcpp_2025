@@ -2,14 +2,15 @@
 #ifndef INCLUDE_CORE_MISSION_STATE_HPP_
 #define INCLUDE_CORE_MISSION_STATE_HPP_
 
-#include <memory>
 #include <chrono>
-#include <string> 
-#include <mutex> 
+#include <memory>
+#include <mutex>
+#include <string>
+
 #include "ticks/tick.hpp"
 
 class MissionState {
-public:
+ public:
     // Public state variables for ticks to interact with
     bool is_prepared = false;
     int task_progress = 0;
@@ -27,8 +28,11 @@ public:
     // Method for the OBC to set the very first tick
     void setInitialTick(Tick* first_tick);
 
-private:
+    // Method to get current tick ID
+    TickID getTickID();
+
+ private:
     Tick* current_tick;
 };
 
-#endif // INCLUDE_CORE_MISSION_STATE_HPP_
+#endif  // INCLUDE_CORE_MISSION_STATE_HPP_

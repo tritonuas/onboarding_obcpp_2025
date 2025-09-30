@@ -23,4 +23,5 @@ GCSServer::~GCSServer() {
 void GCSServer::_bindHandlers() {
     // Use our macro to bind the GET /status route
     BIND_HANDLER(Get, status);
+    BIND_HANDLER(Get, tick);
 }
