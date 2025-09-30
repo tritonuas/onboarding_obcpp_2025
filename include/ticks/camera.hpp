@@ -5,19 +5,24 @@
 #include "ticks/tick.hpp"
 #include "camera/mock.hpp"
 
+/* 
+ * CameraTick: this is the tick that is responsible for executing the camera functionality
+ */
 class CameraTick : public Tick {
     public:
+
+        // Constructor that passes the shared state to the base Tick class.
         explicit CameraTick(std::shared_ptr<MissionState> state);
 
+        // Called once when this tick becomes the active state.
         void init() override;
 
-        std::chrono::milliseconds getWait() const override;
-
+        // The core logic that is executed repeatedly.
         Tick* tick() override;
 
     private:
 
-        MockCamera camera; // TODO: where should this realistically be?
+        MockCamera camera;
 
 };
 
