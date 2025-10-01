@@ -66,15 +66,15 @@ $(BUILD_DIR)/%.o: %.cpp $(PROTO_HEADER) | $(BUILD_DIR)
 
 $(TEST_BUILD_DIR)/%.test.o: tests/unit/%.cpp | $(TEST_BUILD_DIR)
 	@echo "Compiling test $< -> $@"
-	$(CXX) $(CXXFLAGS) -I$(GTEST_INCLUDE) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -I$(GTEST_INCLUDE) -c $< -o $@ $(OPENCV_CFLAGS)
 
 $(TEST_BUILD_DIR)/%.it.o: tests/integration/%.cpp | $(TEST_BUILD_DIR)
 	@echo "Compiling integration $< -> $@"
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -c $< -o $@ $(OPENCV_CFLAGS)
 
 $(TEST_EXECUTABLE): $(TEST_OBJECTS) $(NON_MAIN_OBJECTS) | $(TEST_BUILD_DIR) $(BUILD_DIR)
 	@echo "Linking unit tests..."
-	$(CXX) $(CXXFLAGS) -o $@ $(NON_MAIN_OBJECTS) $(TEST_OBJECTS) $(GTEST_LDFLAGS) $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) -o $@ $(NON_MAIN_OBJECTS) $(TEST_OBJECTS) $(GTEST_LDFLAGS) $(LDFLAGS) $(OPENCV_LIBS)
 	@echo "Unit test binary is at $(TEST_EXECUTABLE)"
 
 # Build all integration binaries
@@ -84,7 +84,7 @@ integration: $(INTEG_BINARIES)
 # Pattern rule to link integration programs against non-main objects
 $(TEST_BUILD_DIR)/%: $(TEST_BUILD_DIR)/%.it.o $(NON_MAIN_OBJECTS) | $(TEST_BUILD_DIR) $(BUILD_DIR)
 	@echo "Linking integration $@..."
-	$(CXX) $(CXXFLAGS) -o $@ $(NON_MAIN_OBJECTS) $< $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) -o $@ $(NON_MAIN_OBJECTS) $< $(LDFLAGS) $(OPENCV_LIBS)
 
 $(PROTO_BUILD_DIR)/%.pb.o: $(PROTO_BUILD_DIR)/%.pb.cc | $(PROTO_BUILD_DIR)
 	@echo "Compiling Protobuf source $< -> $@"
