@@ -1,16 +1,16 @@
-#ifndef INCLUDE_TICKS_END_TICK_HPP_
-#define INCLUDE_TICKS_END_TICK_HPP_
+#ifndef INCLUDE_TICKS_CVLOITER_TICK_HPP_
+#define INCLUDE_TICKS_CVLOITER_TICK_HPP_
 
 #include "ticks/tick.hpp"
 #include <chrono>
 
 /*
- * EndTIck: The tick that ends the mission.
+ * CVLoiterTick: The tick that waits on /capture.
  */
-class EndTick : public Tick {
+class CVLoiterTick : public Tick {
 public:
     // Constructor that passes the shared state to the base Tick class.
-    explicit EndTick(std::shared_ptr<MissionState> state);
+    explicit CVLoiterTick(std::shared_ptr<MissionState> state);
 
     // Called once when this tick becomes the active state.
     void init() override;
@@ -24,4 +24,4 @@ public:
 private:
 };
 
-#endif // INCLUDE_TICKS_END_TICK_HPP_
+#endif // INCLUDE_TICKS_CVLOITER_TICK_HPP_
