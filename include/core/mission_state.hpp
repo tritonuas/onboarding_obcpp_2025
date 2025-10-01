@@ -7,7 +7,9 @@
 #include <mutex>
 #include <string>
 
+#include "camera/interface.hpp"
 #include "ticks/tick.hpp"
+#include <opencv2/opencv.hpp>
 
 class MissionState {
  public:
@@ -28,10 +30,22 @@ class MissionState {
     // Method for the OBC to set the very first tick
     void setInitialTick(Tick* first_tick);
 
+    // Whether we captured an image already
+    ImageData image;
+
+    // Enum to track the state of the image
+    enum ImageState : int {
+        WAITING = 0,
+        VALID = 1,
+        INVALID = 2
+    };
+
+    ImageState image_state = ImageState::WAITING;
+
     // Method to get current tick ID
     TickID getTickID();
 
- private:
+private:
     Tick* current_tick;
 };
 

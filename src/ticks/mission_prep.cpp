@@ -1,5 +1,6 @@
 #include "ticks/mission_prep.hpp"
 #include "core/mission_state.hpp"
+#include "ticks/switch.hpp"
 
 #include <iostream>
 
@@ -30,8 +31,7 @@ Tick* MissionPrepTick::tick() {
 
         state->is_prepared = true;
 
-        // TODO: Add next tick switch
-        // return new ExecutionTick(state);
+        return new SwitchTick(state);
 
     } else {
         std::cout << "  - Preparing... (Current time: " << time_elapsed.count() << ")" << std::endl;

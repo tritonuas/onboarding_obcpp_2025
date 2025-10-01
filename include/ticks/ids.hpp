@@ -3,7 +3,9 @@
 
 enum class TickID {
     MissionPrep,
-    Completion,
+    Switch,
+    Verify,
+    End,
 };
 
 #define _SET_TICK_ID_MAPPING(id) \
@@ -12,7 +14,9 @@ enum class TickID {
 constexpr const char* TICK_ID_TO_STR(TickID id) {
     switch (id) {
         _SET_TICK_ID_MAPPING(MissionPrep);
-        _SET_TICK_ID_MAPPING(Completion);
+        _SET_TICK_ID_MAPPING(Switch);
+        _SET_TICK_ID_MAPPING(Verify);
+        _SET_TICK_ID_MAPPING(End);
         default: return "Unknown TickID";
     }
 }
