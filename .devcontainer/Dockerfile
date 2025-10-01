@@ -9,4 +9,5 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && cmake -S /usr/src/googletest -B /tmp/build-gtest -DBUILD_GMOCK=OFF -DBUILD_GTEST=ON \
     && cmake --build /tmp/build-gtest --config Release \
     && find /tmp/build-gtest -name "libgtest*.a" -exec cp {} /usr/local/lib/ \; \
-    && ldconfig
+    && ldconfig \
+    && apt-get -y install libopencv-dev

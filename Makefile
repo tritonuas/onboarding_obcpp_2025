@@ -1,7 +1,10 @@
 # Makefile for the OBCpp Onboarding Project
 
+OPENCV_CFLAGS = $(shell pkg-config --cflags opencv4)
+OPENCV_LIBS   = $(shell pkg-config --libs opencv4)
+
 CXX = g++
-CXXFLAGS = -std=c++20 -Wall -I./deps -I./include -I./build/protos
+CXXFLAGS = -std=c++20 -Wall -I./deps -I./include -I./build/protos 
 LDFLAGS = -lprotobuf -lpthread
 
 # gtest configs
@@ -23,7 +26,7 @@ PROTO_BUILD_DIR = $(BUILD_DIR)/protos
 TEST_BUILD_DIR = $(BUILD_DIR)/tests
 EXECUTABLE = $(BUILD_DIR)/mission_runner
 
-SOURCES = $(wildcard src/*.cpp src/core/*.cpp src/ticks/*.cpp src/network/*.cpp)
+SOURCES = $(wildcard src/*.cpp src/core/*.cpp src/ticks/*.cpp src/network/*.cpp src/camera/*.cpp src/utilities/*.cpp)
 
 PROTO_HEADER = $(PROTO_BUILD_DIR)/onboarding.pb.h
 PROTO_SOURCE = $(PROTO_BUILD_DIR)/onboarding.pb.cc
@@ -32,7 +35,7 @@ OBJECTS = $(addprefix $(BUILD_DIR)/, $(notdir $(SOURCES:.cpp=.o)))
 OBJECTS += $(PROTO_BUILD_DIR)/onboarding.pb.o
 NON_MAIN_OBJECTS = $(filter-out $(BUILD_DIR)/main.o, $(OBJECTS))
 
-vpath %.cpp src src/core src/ticks src/network
+vpath %.cpp src src/core src/ticks src/network src/utilities src/camera
 
 # Build Targets
 all: build
@@ -54,12 +57,12 @@ test: $(TEST_EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS) | $(BUILD_DIR)
 	@echo "Linking..."
-	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS) $(OPENCV_LIBS)
 	@echo "Build complete. Executable is at $(EXECUTABLE)"
 
 $(BUILD_DIR)/%.o: %.cpp $(PROTO_HEADER) | $(BUILD_DIR)
 	@echo "Compiling $< -> $@"
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -c $< -o $@ $(OPENCV_CFLAGS)
 
 $(TEST_BUILD_DIR)/%.test.o: tests/unit/%.cpp | $(TEST_BUILD_DIR)
 	@echo "Compiling test $< -> $@"
