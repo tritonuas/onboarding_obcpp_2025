@@ -36,14 +36,18 @@ DEF_GCS_HANDLE(Get, tick) {
     response.status = 200;
 }
 DEF_GCS_HANDLE(Post, message) {
-    DetectedObject detected_object;
-    google::protobuf::util::JsonStringToMessage(request.body, &detected_object);
-
+    std::string received_message = request.body;
+    
     {
-        std::lock_guard<std::mutex> lock(state->state_mut);
-        state->last_detected_object = ODLCObjects_ID_TO_STR(detected_object);
+        std::lock_guard<std::mutex> lock(state->image_mut);
+        
+        if (received_message == state->image_object) {
+            state->image_state = MissionState::ImageState::VALID;
+        } else {
+            state->image_state = MissionState::ImageState::INVALID;
+        }
     }
-
-    response.set_content("{\"status\": \"received\"}", "application/json");
+    
+    response.set_content("Message received", "text/plain");
     response.status = 200;
 }
