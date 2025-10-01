@@ -27,8 +27,11 @@ DEF_GCS_HANDLE(Get, status) {
 }
 
 DEF_GCS_HANDLE(Get, tick) {
-    TickID tickID = state->getTickID();
-    std::string tick_state = TICK_ID_TO_STR(tickID);
+    std::string tick_state;
+    {
+        std::lock_guard<std::mutex> lock(state->state_mut);
+        tick_state = state->current_tick_name;
+    }
 
     response.set_content(tick_state, "text/plain");
     response.status = 200;

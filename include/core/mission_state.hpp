@@ -7,6 +7,7 @@
 #include <mutex>
 #include <string>
 
+#include "camera/interface.hpp"
 #include "ticks/tick.hpp"
 #include <opencv2/opencv.hpp>
 
@@ -30,7 +31,7 @@ class MissionState {
     void setInitialTick(Tick* first_tick);
 
     // Whether we captured an image already
-    cv::Mat image;
+    ImageData image;
 
     // Enum to track the state of the image
     enum ImageState : int {

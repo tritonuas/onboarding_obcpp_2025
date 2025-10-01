@@ -10,6 +10,10 @@ void SwitchTick::init() {
 
 }
 
+std::chrono::milliseconds SwitchTick::getWait() const {
+    return std::chrono::milliseconds(250);
+}
+
 
 Tick* SwitchTick::tick() {
 

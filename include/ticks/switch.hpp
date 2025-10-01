@@ -17,6 +17,9 @@ public:
     // Called once when this tick becomes the active state.
     void init() override;
 
+    // Defines how often the `tick()` method is called.
+    std::chrono::milliseconds getWait() const override;
+
     // The core logic that is executed repeatedly.
     Tick* tick() override;
 

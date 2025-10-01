@@ -1,5 +1,6 @@
 #include "ticks/verify.hpp"
 #include "ticks/end.hpp"
+#include "core/mission_state.hpp"
 
 #include <iostream>
 
@@ -8,6 +9,10 @@ VerifyTick::VerifyTick(std::shared_ptr<MissionState> state)
 
 void VerifyTick::init() {
 	state->image_state = MissionState::ImageState::WAITING;
+}
+
+std::chrono::milliseconds VerifyTick::getWait() const {
+    return std::chrono::milliseconds(250);
 }
 
 
