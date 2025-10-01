@@ -17,6 +17,7 @@ class MissionState {
     bool is_prepared = false;
     int task_progress = 0;
     std::string current_tick_name;
+    std::string last_detected_object;
 
     // Mutex to protect shared data between the main loop and the server thread
     std::mutex state_mut;

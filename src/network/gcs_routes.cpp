@@ -1,6 +1,8 @@
 #include "network/gcs_routes.hpp"
-#include "core/mission_state.hpp"
+
 #include <google/protobuf/util/json_util.h>
+
+#include "core/mission_state.hpp"
 
 // This needs to be included to get the definition of our proto message
 #include "onboarding.pb.h"
@@ -31,5 +33,17 @@ DEF_GCS_HANDLE(Get, tick) {
     std::string tick_state = TICK_ID_TO_STR(tickID);
 
     response.set_content(tick_state, "text/plain");
+    response.status = 200;
+}
+DEF_GCS_HANDLE(Post, message) {
+    DetectedObject detected_object;
+    google::protobuf::util::JsonStringToMessage(request.body, &detected_object);
+
+    {
+        std::lock_guard<std::mutex> lock(state->state_mut);
+        state->last_detected_object = ODLCObjects_ID_TO_STR(detected_object);
+    }
+
+    response.set_content("{\"status\": \"received\"}", "application/json");
     response.status = 200;
 }
