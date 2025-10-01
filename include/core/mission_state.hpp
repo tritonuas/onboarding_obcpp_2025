@@ -2,15 +2,16 @@
 #ifndef INCLUDE_CORE_MISSION_STATE_HPP_
 #define INCLUDE_CORE_MISSION_STATE_HPP_
 
-#include <memory>
 #include <chrono>
-#include <string> 
-#include <mutex> 
+#include <memory>
+#include <mutex>
+#include <string>
+
 #include "ticks/tick.hpp"
 #include <opencv2/opencv.hpp>
 
 class MissionState {
-public:
+ public:
     // Public state variables for ticks to interact with
     bool is_prepared = false;
     int task_progress = 0;
@@ -41,7 +42,9 @@ public:
     ImageState image_state = ImageState::WAITING;
 
 private:
+    // Method to get current tick ID
+    TickID getTickID();
     Tick* current_tick;
 };
 
-#endif // INCLUDE_CORE_MISSION_STATE_HPP_
+#endif  // INCLUDE_CORE_MISSION_STATE_HPP_

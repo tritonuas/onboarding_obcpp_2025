@@ -16,7 +16,12 @@
             ],
             "settings": {
                 "C_Cpp.default.compilerPath": "/usr/bin/g++"
-            }
+            },
+            "C_Cpp.default.includePath": [
+                "/usr/include/opencv4",
+                "/workspaces/onboarding_obcpp_2025/**"
+            ]
+            
         }
     },
     "features": {

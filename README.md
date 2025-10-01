@@ -33,3 +33,12 @@ Most operations including building and running the project is done through the `
 2. `make protos` - builds the protobuf files 
 3. `make run` - runs project / mission_runner
 4. `make clean` - empties the build directory
+
+
+## Tests:
+To run unit tests, you can just run `make test`.
+
+For integration tests (requires manual verification), make sure you run `make integration` first to build the integration test targets, then cd into `build/` and run `./tests/testname`, where testname is the file of your test (without the .cpp extension).
+
+To add tests yourself, simply put them under `tests/unit` or `tests/integration`.
+
