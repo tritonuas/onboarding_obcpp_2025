@@ -42,9 +42,10 @@ class MissionState {
 
     ImageState image_state = ImageState::WAITING;
 
-private:
     // Method to get current tick ID
     TickID getTickID();
+
+private:
     Tick* current_tick;
 };
 
