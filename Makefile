@@ -6,6 +6,9 @@ OPENCV_LIBS   = $(shell pkg-config --libs opencv4)
 OPENCV_CFLAGS = $(shell pkg-config --cflags opencv4)
 OPENCV_LIBS   = $(shell pkg-config --libs opencv4)
 
+OPENCV_CFLAGS = $(shell pkg-config --cflags opencv4)
+OPENCV_LIBS   = $(shell pkg-config --libs opencv4)
+
 CXX = g++
 CXXFLAGS = -std=c++20 -Wall -I./deps -I./include -I./build/protos 
 LDFLAGS = -lprotobuf -lpthread

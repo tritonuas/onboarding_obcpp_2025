@@ -31,7 +31,12 @@ Tick* MissionPrepTick::tick() {
 
         state->is_prepared = true;
 
+<<<<<<< HEAD
         return new SwitchTick(state);
+=======
+        // TODO: Add next tick switch
+        return new CameraTick(state); // added in to test
+>>>>>>> 8a3dea9df7551c23ed4319636b0f8937c7124320
 
     } else {
         std::cout << "  - Preparing... (Current time: " << time_elapsed.count() << ")" << std::endl;
