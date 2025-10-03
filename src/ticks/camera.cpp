@@ -1,8 +1,9 @@
 #include <thread>
 #include <iostream>
 #include "ticks/camera.hpp"
+#include "ticks/ids.hpp"
 
-CameraTick::CameraTick(std::shared_ptr<MissionState> state) : Tick(state), camera() {
+CameraTick::CameraTick(std::shared_ptr<MissionState> state) : Tick(state, TickID::Camera), camera() {
 
 }
 
@@ -21,6 +22,7 @@ Tick* CameraTick::tick() {
         this->camera.stopTakingPictures();
 
         // TODO: not sure what tick to return so just return nullptr
+        return nullptr;
     } else {
 
         std::cout << this->camera.getImageCount() << std::endl;
