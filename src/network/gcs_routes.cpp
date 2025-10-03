@@ -3,6 +3,7 @@
 #include <google/protobuf/util/json_util.h>
 
 #include "core/mission_state.hpp"
+#include "nlohmann/json.hpp"
 
 // This needs to be included to get the definition of our proto message
 #include "onboarding.pb.h"
@@ -35,25 +36,51 @@ DEF_GCS_HANDLE(Get, tick) {
     response.set_content(tick_state, "text/plain");
     response.status = 200;
 }
+
 DEF_GCS_HANDLE(Post, message) {
     std::string received_message = request.body;
-    
+
+    DetectedObject detected_proto;
+    auto parse_status = google::protobuf::util::JsonStringToMessage(received_message, &detected_proto);
+    if (!parse_status.ok()) {
+        response.set_content("Invalid JSON for DetectedObject", "text/plain");
+        response.status = 400;
+        return;
+    }
+
+    const std::string detected_name = ODLCObjects_Name(detected_proto.object());
+
     {
         std::lock_guard<std::mutex> lock(state->image_mut);
-        
-        if (received_message == state->image_object) {
-            state->image_state = MissionState::ImageState::VALID;
+
+        // Compare detected object name to current image filename (stem)
+        if (state->image.has_value()) {
+            const std::string &filename = state->image->filename;
+            state->image_object = detected_name;
+            if (!detected_name.empty() && detected_name == filename) {
+                state->image_state = MissionState::ImageState::VALID;
+            } else {
+                state->image_state = MissionState::ImageState::INVALID;
+            }
         } else {
             state->image_state = MissionState::ImageState::INVALID;
         }
     }
-    
-    response.set_content("Message received", "text/plain");
+
+    response.set_content("Message received", "application/json");
     response.status = 200;
 }
 
 DEF_GCS_HANDLE(Get, capture) {
+    std::lock_guard<std::mutex> lock(state->state_mut);
     std::optional<ImageData> img = state->image;
+    std::cout << "img.has_value() = " << img.has_value() << std::endl;
+    if (!img.has_value()) {
+        std::cout << "No image available" << std::endl;
+        response.set_content("No image available", "text/plain");
+        response.status = 503;
+        return;
+    }
     std::string img_b64 = cvMatToBase64(img->DATA);
 
     state->has_captured = true;
