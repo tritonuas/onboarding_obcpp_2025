@@ -20,6 +20,9 @@ class CameraTick : public Tick {
         // The core logic that is executed repeatedly.
         Tick* tick() override;
 
+        // Defines how often the `tick()` method is called.
+        std::chrono::milliseconds getWait() const override;
+
     private:
 
         MockCamera camera;
