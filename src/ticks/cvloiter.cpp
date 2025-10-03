@@ -6,7 +6,7 @@
 #include <iostream>
 
 CVLoiterTick::CVLoiterTick(std::shared_ptr<MissionState> state)
-    : Tick(state, TickID::End) {}
+    : Tick(state, TickID::CVLoiter) {}
 
 void CVLoiterTick::init() {
 
