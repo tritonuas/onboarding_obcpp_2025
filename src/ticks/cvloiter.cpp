@@ -6,7 +6,7 @@
 #include <iostream>
 
 CVLoiterTick::CVLoiterTick(std::shared_ptr<MissionState> state)
-    : Tick(state, TickID::End) {}
+    : Tick(state, TickID::CVLoiter) {}
 
 void CVLoiterTick::init() {
 
@@ -20,6 +20,7 @@ std::chrono::milliseconds CVLoiterTick::getWait() const {
 Tick* CVLoiterTick::tick() {
 
 	if (state->has_captured) {
+		std::cout << "Switching to SwitchTick" << std::endl;
 		return new SwitchTick(state);
 	} else {
 		return new CVLoiterTick(state);

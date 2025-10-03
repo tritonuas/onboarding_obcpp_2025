@@ -5,6 +5,7 @@ enum class TickID {
     MissionPrep,
     Switch,
     Camera,
+    CVLoiter,
     Verify,
     End,
 };
@@ -17,6 +18,7 @@ constexpr const char* TICK_ID_TO_STR(TickID id) {
         _SET_TICK_ID_MAPPING(MissionPrep);
         _SET_TICK_ID_MAPPING(Switch);
         _SET_TICK_ID_MAPPING(Camera);
+        _SET_TICK_ID_MAPPING(CVLoiter);
         _SET_TICK_ID_MAPPING(Verify);
         _SET_TICK_ID_MAPPING(End);
         default: return "Unknown TickID";

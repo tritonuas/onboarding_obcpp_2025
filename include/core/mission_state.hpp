@@ -6,6 +6,7 @@
 #include <memory>
 #include <mutex>
 #include <string>
+#include <optional>
 
 #include "camera/interface.hpp"
 #include "ticks/tick.hpp"
@@ -30,8 +31,8 @@ class MissionState {
     // Method for the OBC to set the very first tick
     void setInitialTick(Tick* first_tick);
 
-    // Whether we captured an image already
-    ImageData image;
+    // Captured image
+    std::optional<ImageData> image;
 
     // Enum to track the state of the image
     enum ImageState : int {
@@ -45,6 +46,7 @@ class MissionState {
     // Method to get current tick ID
     TickID getTickID();
 
+    // Whether we called /capture already
     bool has_captured = false;
 
 private:
