@@ -33,3 +33,13 @@ DEF_GCS_HANDLE(Get, tick) {
     response.set_content(tick_state, "text/plain");
     response.status = 200;
 }
+
+DEF_GCS_HANDLE(Get, capture) {
+    std::optional<ImageData> img = state->image;
+    std::string img_b64 = cvMatToBase64(img->DATA);
+
+    state->has_captured = true;
+    
+    response.set_content(img_b64, "text/plain");
+    response.status = 200;
+}
