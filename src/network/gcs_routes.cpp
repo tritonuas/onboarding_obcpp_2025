@@ -57,10 +57,14 @@ DEF_GCS_HANDLE(Post, message) {
         if (state->image.has_value()) {
             const std::string &filename = state->image->filename;
             state->image_object = detected_name;
+
+            std::cout << "Detected Objecct: " << detected_name << "\n Ground Truth:" << filename << std::endl;
             if (!detected_name.empty() && detected_name == filename) {
                 state->image_state = MissionState::ImageState::VALID;
+                std::cout << "Message Accepted!" << std::endl;
             } else {
                 state->image_state = MissionState::ImageState::INVALID;
+                std::cout << "Message Rejected" << std::endl;
             }
         } else {
             state->image_state = MissionState::ImageState::INVALID;
