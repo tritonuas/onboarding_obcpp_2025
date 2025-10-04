@@ -4,11 +4,13 @@
 #include <optional>
 #include <chrono>
 #include <opencv2/opencv.hpp>
+#include <string>
 #include "utilities/base64.hpp"
 
 // Struct to hold the image
 struct ImageData {
     cv::Mat DATA;
+    std::string filename;
 };
 
 // Utility function for converting an image loaded with OpenCV into base-64
