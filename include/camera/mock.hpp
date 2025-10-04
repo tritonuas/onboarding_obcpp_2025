@@ -14,7 +14,7 @@
 const int DUMMY_INTERVAL = 1000;
 const int DUMMY_TIMEOUT = 1000;
 const int IMAGE_COUNT = 5;
-const std::string images_dir = "/workspaces/test/images/";
+const std::string images_dir = "/workspaces/images/";
 
 /**
  *
