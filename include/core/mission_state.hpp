@@ -48,9 +48,6 @@ class MissionState {
     // Method to get current tick ID
     TickID getTickID();
 
-    // Whether we called /capture already
-    bool has_captured = false;
-
 private:
     Tick* current_tick;
 };

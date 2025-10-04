@@ -29,7 +29,3 @@ message OBCStatus {
   bool is_connected = 2;
   double mission_progress_percent = 3;
 }
-
-message DetectedObject {
-    ODLCObjects object = 1;
-}
