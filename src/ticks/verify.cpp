@@ -22,7 +22,7 @@ Tick* VerifyTick::tick() {
 
 	// Waiting for verification from handler
 	if (state->image_state == MissionState::ImageState::WAITING) {
-		return new VerifyTick(state);
+		return nullptr;
 	} else if (state->image_state == MissionState::ImageState::VALID) {
 		// Image is valid, we can end the mission
 		return new EndTick(state);

@@ -22,8 +22,19 @@ std::optional<ImageData> MockCamera::takePicture(const std::chrono::milliseconds
         entries.push_back(entry);
     }
 
-    cv::Mat captured_image = cv::imread(entries[image_index].path().string());
-    image_index++; // 
+    // Debug: show how many entries we found
+    std::cout << "MockCamera: entries found = " << entries.size() << std::endl;
+
+    if (entries.empty()) {
+        std::cout << "MockCamera: no entries in images_dir, returning empty image" << std::endl;
+        return {};
+    }
+
+    size_t idx = static_cast<size_t>(image_index) % entries.size();
+    std::string path_str = entries[idx].path().string();
+    std::cout << "MockCamera: loading index " << idx << " from path: " << path_str << std::endl;
+    cv::Mat captured_image = cv::imread(path_str);
+    image_index++;
 
     auto now = std::chrono::steady_clock::now();
 
@@ -31,8 +42,14 @@ std::optional<ImageData> MockCamera::takePicture(const std::chrono::milliseconds
         return {};
     }
 
+    if (captured_image.empty()) {
+        std::cout << "MockCamera: imread returned empty image for path: " << path_str << std::endl;
+        return {};
+    }
+
     ImageData image_data;
     image_data.DATA = captured_image;
+    image_data.filename = entries[idx].path().stem().string();
 
     return image_data;
 }

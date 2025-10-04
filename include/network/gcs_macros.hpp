@@ -10,4 +10,4 @@
 #define GCS_HANDLE(Method, uri) Method##_##uri
 #define DEF_GCS_HANDLE(Method, uri) void GCS_HANDLE(Method, uri) (GCS_HANDLER_PARAMS)
 
-#endif // INCLUDE_NETWORK_GCS_MACROS_HPP_
+#endif  // INCLUDE_NETWORK_GCS_MACROS_HPP_

@@ -1,10 +1,10 @@
 #include "network/gcs.hpp"
+
 #include <iostream>
+
 #include "network/gcs_routes.hpp"
 
-GCSServer::GCSServer(uint16_t port, std::shared_ptr<MissionState> state)
-    : state{state} {
-    
+GCSServer::GCSServer(uint16_t port, std::shared_ptr<MissionState> state) : state{state} {
     this->_bindHandlers();
 
     this->server_thread = std::thread([this, port]() {
@@ -24,5 +24,6 @@ void GCSServer::_bindHandlers() {
     // Use our macro to bind the GET /status route
     BIND_HANDLER(Get, status);
     BIND_HANDLER(Get, tick);
+    BIND_HANDLER(Post, message);
     BIND_HANDLER(Get, capture);
 }
