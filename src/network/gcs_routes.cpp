@@ -62,17 +62,19 @@ DEF_GCS_HANDLE(Post, message) {
             if (!detected_name.empty() && detected_name == filename) {
                 state->image_state = MissionState::ImageState::VALID;
                 std::cout << "Message Accepted!" << std::endl;
+                response.set_content("Matched object is correct. Ending mission.", "application/json");
+                response.status = 200;
             } else {
                 state->image_state = MissionState::ImageState::INVALID;
                 std::cout << "Message Rejected" << std::endl;
+                response.set_content("Matched object is incorrect. Going to take another picture.", "application/json");
+                response.status = 200;
             }
         } else {
             state->image_state = MissionState::ImageState::INVALID;
         }
     }
 
-    response.set_content("Message received", "application/json");
-    response.status = 200;
 }
 
 DEF_GCS_HANDLE(Get, capture) {
