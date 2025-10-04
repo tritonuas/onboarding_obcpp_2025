@@ -64,11 +64,11 @@ $(BUILD_DIR)/%.o: %.cpp $(PROTO_HEADER) | $(BUILD_DIR)/.dir
 	@echo "Compiling $< -> $@"
 	$(CXX) $(CXXFLAGS) -c $< -o $@ $(OPENCV_CFLAGS)
 
-$(TEST_BUILD_DIR)/%.test.o: tests/unit/%.cpp | $(TEST_BUILD_DIR)
+$(TEST_BUILD_DIR)/%.test.o: tests/unit/%.cpp | $(TEST_BUILD_DIR)/.dir
 	@echo "Compiling test $< -> $@"
 	$(CXX) $(CXXFLAGS) -I$(GTEST_INCLUDE) -c $< -o $@ $(OPENCV_CFLAGS)
 
-$(TEST_BUILD_DIR)/%.it.o: tests/integration/%.cpp | $(TEST_BUILD_DIR)
+$(TEST_BUILD_DIR)/%.it.o: tests/integration/%.cpp | $(TEST_BUILD_DIR)/.dir
 	@echo "Compiling integration $< -> $@"
 	$(CXX) $(CXXFLAGS) -c $< -o $@ $(OPENCV_CFLAGS)
 
