@@ -1,6 +1,5 @@
 #include "ticks/switch.hpp"
 #include "ticks/verify.hpp"
-#include "ticks/camera.hpp"
 #include "core/mission_state.hpp"
 
 #include <iostream>

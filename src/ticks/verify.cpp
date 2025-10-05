@@ -1,7 +1,6 @@
 #include "ticks/verify.hpp"
 #include "ticks/end.hpp"
 #include "core/mission_state.hpp"
-#include "ticks/camera.hpp"
 
 #include <iostream>
 
