@@ -36,7 +36,11 @@ std::optional<ImageData> MockCamera::takePicture(const std::chrono::milliseconds
     std::cout << "MockCamera: loading index " << idx << " from path: " << path_str << std::endl;
     
     // TODO: IMPLEMENT YOUR CODE HERE (to load the image)
-      
+    cv::Mat image = cv::imread(path_str);
+    if (image.empty()) {
+        return {};
+    }
+
     // After the image is taken
     auto now = std::chrono::steady_clock::now();
 
@@ -48,7 +52,8 @@ std::optional<ImageData> MockCamera::takePicture(const std::chrono::milliseconds
     ImageData image_data;
 
     // TODO: IMPLEMENT YOUR CODE HERE (To set the contents of image_data)
-
+    image_data.filename = path_str;
+    image_data.DATA = image;
     return image_data;
 }
 
