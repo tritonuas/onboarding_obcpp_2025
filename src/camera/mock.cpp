@@ -35,7 +35,10 @@ std::optional<ImageData> MockCamera::takePicture(const std::chrono::milliseconds
 
     std::cout << "MockCamera: loading index " << idx << " from path: " << path_str << std::endl;
     
-    // TODO: IMPLEMENT YOUR CODE HERE (to load the image)
+    cv::Mat mat = cv::imread(path_str);
+    if (mat.empty()) {
+        return {};
+    }
       
     // After the image is taken
     auto now = std::chrono::steady_clock::now();
@@ -47,16 +50,28 @@ std::optional<ImageData> MockCamera::takePicture(const std::chrono::milliseconds
     image_index++;
     ImageData image_data;
 
-    // TODO: IMPLEMENT YOUR CODE HERE (To set the contents of image_data)
+    std::filesystem::path pathObj = path_str;
+    image_data.DATA = mat;
+    image_data.filename = pathObj.filename().string();
 
     return image_data;
 }
 
 void MockCamera::startTakingPictures(const std::chrono::milliseconds& interval) {
+    if (!is_taking_pictures.exchange(true)) {
+        capture_thread = std::thread([this, &interval]() {
+            while (is_taking_pictures) {
+                captureInterval(interval);
+            }
+        });
+    }
     return;
 }
 
 void MockCamera::stopTakingPictures() {
+    if (is_taking_pictures.exchange(false)) {
+        capture_thread.detach();
+    }
     return;
 }
 
@@ -70,9 +85,18 @@ void MockCamera::processCapturedImage(std::optional<ImageData> capturedImage) {
 }
 
 int MockCamera::getImageCount() {
-    return 0;
+    ReadLock lock(image_lock);
+    return mock_images.size();
 }
 
 void MockCamera::captureInterval(const std::chrono::milliseconds& interval) {
-    return;
+    auto now = std::chrono::steady_clock::now();
+    auto captureTimepoint = last_taken + interval;
+    if (now > captureTimepoint) {
+        last_taken = now;
+        takePicture(std::chrono::milliseconds(DUMMY_TIMEOUT));
+    }
+    else {
+        std::this_thread::sleep_for(captureTimepoint - now);
+    }
 }
