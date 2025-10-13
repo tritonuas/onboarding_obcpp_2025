@@ -3,6 +3,7 @@
 #include "camera/mock.hpp"
 #include "ticks/end.hpp"
 #include "core/mission_state.hpp"
+#include "ticks/cvloiter.hpp"
 
 #include <iostream>
 
@@ -22,7 +23,7 @@ Tick* CameraTick::tick() {
   }
 
   // return nullptr for next tick state
-  return new EndTick(state);
+  return new CvLoiterTick(state);
 }
 
 std::chrono::milliseconds CameraTick::getWait() const {
