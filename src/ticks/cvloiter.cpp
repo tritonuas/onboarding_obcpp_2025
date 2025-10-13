@@ -16,6 +16,10 @@ void CvLoiterTick::init() {
 Tick* CvLoiterTick::tick() {
   state->current_tick_name = "CvLoiter";
 
+  while(!state->has_captured) {
+    std::cout << "waiting" << std::endl;
+  }
+
   return new SwitchTick(state);
 }
 
