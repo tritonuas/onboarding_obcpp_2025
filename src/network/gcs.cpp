@@ -25,4 +25,5 @@ void GCSServer::_bindHandlers() {
     BIND_HANDLER(Get, status);
     BIND_HANDLER(Get, tick);
     BIND_HANDLER(Get, capture);
+    BIND_HANDLER(Post, message);
 }
