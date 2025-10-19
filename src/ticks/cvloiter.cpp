@@ -1,6 +1,7 @@
 #include "ticks/cvloiter.hpp"
 #include "ticks/switch.hpp"
 #include "core/mission_state.hpp"
+#include "ticks/end.hpp"
 
 #include <iostream>
 
@@ -13,6 +14,9 @@ std::chrono::milliseconds CVLoiterTick::getWait() const {
 
 Tick* CVLoiterTick::tick() {
     std::lock_guard<std::mutex> lock(state->state_mut);
+    if (state->loiter_finished) {
+        return new EndTick(state);
+    }
     if (state->has_captured) {
         state->has_captured = false;
         return new SwitchTick(state);

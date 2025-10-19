@@ -54,10 +54,18 @@ DEF_GCS_HANDLE(Get, capture) {
 
 DEF_GCS_HANDLE(Post, message) {
     DetectedObject detected_proto;
-    auto parse_status = google::protobuf::util::JsonStringToMessage(response.body, &detected_proto);
+    auto parse_status = google::protobuf::util::JsonStringToMessage(request.body, &detected_proto);
     const std::string detected_name = ODLCObjects_Name(detected_proto.object());
-    std::lock_guard<std::mutex> lock(state->image_mut);
-    std::filesystem::path filename = state->image->filename;
-    response.set_content(filename.replace_extension(), "text/plain");
-    response.status = 200;
+    std::string imageName;
+    {
+        std::lock_guard<std::mutex> lock(state->image_mut);
+        std::filesystem::path filename = state->image->filename;
+        imageName = filename.replace_extension();
+        response.set_content(imageName, "text/plain");
+    }
+    if (imageName == detected_name) {
+        std::lock_guard<std::mutex> lock(state->state_mut);
+        state->loiter_finished = true;
+    }
+    response.status = imageName == detected_name ? 200 : 404;
 }

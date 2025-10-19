@@ -6,6 +6,7 @@ MissionState::MissionState() : current_tick(nullptr) {
     this->is_prepared = false;
     this->task_progress = 0.0;
     this->current_tick_name = "None";
+    this->loiter_finished = false;
 }
 
 MissionState::~MissionState() {

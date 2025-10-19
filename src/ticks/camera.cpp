@@ -15,6 +15,7 @@ void CameraTick::init()
 
 Tick *CameraTick::tick()
 {
+    std::lock_guard<std::mutex> imageLock(state->image_mut);
     state->image = camera->takePicture(std::chrono::milliseconds(100));
     return new CVLoiterTick(state);
 }
