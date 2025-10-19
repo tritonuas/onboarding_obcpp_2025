@@ -1,7 +1,7 @@
 #include <iostream>
 #include <filesystem>
 #include "camera/mock.hpp"
-
+#include <thread>
 MockCamera::MockCamera() : CameraInterface() {
     this->is_taking_pictures = false;
 }
@@ -34,9 +34,7 @@ std::optional<ImageData> MockCamera::takePicture(const std::chrono::milliseconds
     std::string path_str = entries[idx].path().string();
 
     std::cout << "MockCamera: loading index " << idx << " from path: " << path_str << std::endl;
-    
-    // TODO: IMPLEMENT YOUR CODE HERE (to load the image)
-      
+    auto readfile = cv::imread(path_str);
     // After the image is taken
     auto now = std::chrono::steady_clock::now();
 
@@ -46,33 +44,44 @@ std::optional<ImageData> MockCamera::takePicture(const std::chrono::milliseconds
 
     image_index++;
     ImageData image_data;
-
-    // TODO: IMPLEMENT YOUR CODE HERE (To set the contents of image_data)
+    if(readfile.empty()){
+        return {};
+    }
+    image_data.DATA = readfile;
+    image_data.filename = entries[idx].path().string();
+    
 
     return image_data;
 }
 
 void MockCamera::startTakingPictures(const std::chrono::milliseconds& interval) {
+    this->is_taking_pictures = true;
+    std::thread thread([this, interval]() { this->captureInterval(interval); });
+    thread.detach();
     return;
 }
 
 void MockCamera::stopTakingPictures() {
-    return;
+    this->is_taking_pictures = false;
+    return; 
 }
 
 void MockCamera::processCapturedImage(std::optional<ImageData> capturedImage) {
     WriteLock lock(this->image_lock);
     if (capturedImage.has_value()) {
         ImageData image = capturedImage.value();
-
         this->mock_images.push_back(image);
     }
 }
 
 int MockCamera::getImageCount() {
-    return 0;
+    ReadLock lock(this->image_lock);
+    return this->mock_images.size();
 }
 
 void MockCamera::captureInterval(const std::chrono::milliseconds& interval) {
-    return;
+    while(this->is_taking_pictures){
+       processCapturedImage( takePicture(std::chrono::seconds(1)));
+         std::this_thread::sleep_for(interval);
+    }
 }

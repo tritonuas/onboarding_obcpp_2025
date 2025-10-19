@@ -11,9 +11,18 @@
 #include "camera/interface.hpp"
 #include "ticks/tick.hpp"
 #include <opencv2/opencv.hpp>
-
+#include "onboarding.pb.h"
 class MissionState {
  public:
+    //for verify
+    std::optional<DetectedObject> user_choice;
+    //for cvloiter
+    bool capture_called = false;
+
+    //for switch
+    //if we should go to verify the next time we get to switch
+    bool verify_next = false;
+
     // Public state variables for ticks to interact with
     bool is_prepared = false;
     int task_progress = 0;
