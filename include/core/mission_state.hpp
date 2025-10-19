@@ -15,7 +15,9 @@
 class MissionState {
  public:
     // Public state variables for ticks to interact with
+    bool has_captured = false;
     bool is_prepared = false;
+    bool loiter_finished = false;
     int task_progress = 0;
     std::string current_tick_name;
     std::string image_object;
