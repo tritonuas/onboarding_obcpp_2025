@@ -1,5 +1,6 @@
 #include "ticks/verify.hpp"
 #include "ticks/end.hpp"
+#include "ticks/camera.hpp"
 #include "core/mission_state.hpp"
 
 #include <iostream>
@@ -31,6 +32,6 @@ Tick* VerifyTick::tick() {
 	// }
 
 	// Uncomment above and comment below to actually verify the image
-	return new EndTick(state);
+	return new CameraTick(state);
 	
 }
