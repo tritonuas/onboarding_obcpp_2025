@@ -4,6 +4,7 @@
 
 #include "core/mission_state.hpp"
 #include "nlohmann/json.hpp"
+#include "camera/interface.hpp"
 
 // This needs to be included to get the definition of our proto message
 #include "onboarding.pb.h"
@@ -62,9 +63,21 @@ DEF_GCS_HANDLE(Post, message) {
     std::string response_message;
     std::lock_guard<std::mutex> lock(state->state_mut);
     std::string filename = state->image.value().filename;
+    size_t pos = filename.find_last_of("/\\"); 
+    filename = filename.substr(pos + 1);
+
+    // gets the filename string
+    size_t dot_pos = filename.find_last_of('.');
+    if (dot_pos != std::string::npos) {
+        filename = filename.substr(0, dot_pos);
+    }
+    std::cout << "Filename: " << filename << std::endl;
+    std::cout << "Detected filename: " << detected_name << std::endl;
     if(detected_name == filename) {
+        state->image_state = MissionState::ImageState::VALID;
         response_message = "Selected object matches";
     } else {
+        state->image_state = MissionState::ImageState::INVALID;
         response_message = "Selected object does not match";
     }
     response.set_content(response_message, "text/plain");
