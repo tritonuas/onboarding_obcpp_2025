@@ -46,7 +46,7 @@ class MockCamera : public CameraInterface {
         std::shared_mutex image_lock;           // lock to prevent concurrent access to mock_images
         std::atomic_bool is_taking_pictures;    // indicates whether or not the camera is currently taking pictures
         std::vector<ImageData> mock_images;     // data structure for the captured images
-
+     
         // timestamp of the last image captured
         std::chrono::time_point<std::chrono::steady_clock> last_taken; 
 
