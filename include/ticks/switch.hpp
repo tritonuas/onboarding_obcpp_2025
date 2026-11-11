@@ -2,6 +2,7 @@
 #define INCLUDE_TICKS_SWITCH_TICK_HPP_
 
 #include "ticks/tick.hpp"
+
 #include <chrono>
 
 /*
@@ -24,6 +25,7 @@ public:
     Tick* tick() override;
 
 private:
+    // MockCamera camera;
 };
 
 #endif // INCLUDE_TICKS_SWITCH_TICK_HPP_

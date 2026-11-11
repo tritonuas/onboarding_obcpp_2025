@@ -1,5 +1,6 @@
 #include <iostream>
 #include <filesystem>
+#include <thread>
 #include "camera/mock.hpp"
 
 MockCamera::MockCamera() : CameraInterface() {
@@ -7,7 +8,7 @@ MockCamera::MockCamera() : CameraInterface() {
 }
 
 MockCamera::~MockCamera() {
-
+    
 }
 
 std::optional<ImageData> MockCamera::takePicture(const std::chrono::milliseconds& timeout) {
@@ -36,7 +37,15 @@ std::optional<ImageData> MockCamera::takePicture(const std::chrono::milliseconds
     std::cout << "MockCamera: loading index " << idx << " from path: " << path_str << std::endl;
     
     // TODO: IMPLEMENT YOUR CODE HERE (to load the image)
-      
+    
+    // load image from path
+    cv::Mat img = cv::imread(path_str);
+    if (img.empty()) {
+        std::cout << "image is empty" << std::endl;
+        image_index++;
+        return {};
+    }
+
     // After the image is taken
     auto now = std::chrono::steady_clock::now();
 
@@ -48,16 +57,24 @@ std::optional<ImageData> MockCamera::takePicture(const std::chrono::milliseconds
     ImageData image_data;
 
     // TODO: IMPLEMENT YOUR CODE HERE (To set the contents of image_data)
-
+    image_data.DATA = img;
     return image_data;
+
 }
 
 void MockCamera::startTakingPictures(const std::chrono::milliseconds& interval) {
-    return;
+    // check if camera is already running
+    if (this->is_taking_pictures) {
+        std::cout << "camera is currently active" << std::endl;
+    } else {
+        this->is_taking_pictures = true;
+        capture_thread = std::thread(&MockCamera::captureInterval, this, interval);
+        capture_thread.detach();
+    }
 }
 
 void MockCamera::stopTakingPictures() {
-    return;
+    this->is_taking_pictures = false;
 }
 
 void MockCamera::processCapturedImage(std::optional<ImageData> capturedImage) {
@@ -70,9 +87,22 @@ void MockCamera::processCapturedImage(std::optional<ImageData> capturedImage) {
 }
 
 int MockCamera::getImageCount() {
-    return 0;
+    ReadLock lock(this->image_lock);
+    return mock_images.size();
 }
 
 void MockCamera::captureInterval(const std::chrono::milliseconds& interval) {
-    return;
+    auto last_img_time = std::chrono::steady_clock::now();
+    while (is_taking_pictures) {
+        auto curr_time = std::chrono::steady_clock::now();
+        std::chrono::milliseconds elapsed_time = 
+            std::chrono::duration_cast<std::chrono::milliseconds>(curr_time-last_img_time);
+        // std::cout << "Current time: " << elapsed_time.count() << std::endl;
+        if (elapsed_time > interval) {
+            processCapturedImage(takePicture(std::chrono::milliseconds(100)));
+            std::cout << "MikuBondage! image count:" << getImageCount() << std::endl;
+            last_img_time = std::chrono::steady_clock::now();
+        } 
+        std::this_thread::sleep_for(std::chrono::milliseconds(5));
+    }
 }

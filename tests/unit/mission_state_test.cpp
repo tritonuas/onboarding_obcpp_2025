@@ -2,6 +2,7 @@
 #include <chrono>
 
 #include "core/mission_state.hpp"
+#include "camera/mock.hpp"
 
 // Verifies that a default-constructed MissionState has the expected initial values.
 TEST(MissionStateTest, DefaultsAreInitialized) {
@@ -21,4 +22,14 @@ TEST(MissionStateTest, DoTickWithoutCurrentTickWaitsOneSecond) {
     auto wait_duration = mission_state.doTick();
 
     EXPECT_EQ(wait_duration, std::chrono::milliseconds(1000));
+}
+
+TEST(aaa, bbb) {
+    MockCamera camera;
+    EXPECT_EQ(camera.getImageCount(), 0);
+}
+
+TEST(miku, lewds) {
+    MockCamera camera;
+    
 }
