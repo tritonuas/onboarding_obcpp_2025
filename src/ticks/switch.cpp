@@ -18,7 +18,6 @@ std::chrono::milliseconds SwitchTick::getWait() const {
 
 
 Tick* SwitchTick::tick() {
-
 	// If we have an image, we need to verify it
 	// If we don't have an image, we need to capture it
 	if (state->image.has_value()) {

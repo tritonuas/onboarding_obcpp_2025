@@ -4,6 +4,7 @@
 
 #include "core/mission_state.hpp"
 #include "nlohmann/json.hpp"
+#include "utilities/locks.hpp"
 
 // This needs to be included to get the definition of our proto message
 #include "onboarding.pb.h"
@@ -34,5 +35,21 @@ DEF_GCS_HANDLE(Get, tick) {
     std::string tick_state = TICK_ID_TO_STR(tickID);
 
     response.set_content(tick_state, "text/plain");
+    response.status = 200;
+}
+
+DEF_GCS_HANDLE(Get, capture) {
+    // mutex lock to prevent other threads from accessing the state
+    Lock lock(state->state_mut);
+    if (state->image.has_value()) {
+        response.set_content("no image found", "text/plain");
+        response.status = 501;
+    }
+    // convert img data to b64 and add to response
+    std::string imgData = cvMatToBase64(state->image.value().DATA);
+    
+    std::cout << "MIkuBondage" << std::endl;
+    state->captureFinished = true;
+    response.set_content(imgData, "text/plain");
     response.status = 200;
 }

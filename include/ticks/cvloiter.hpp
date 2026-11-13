@@ -14,6 +14,6 @@ public:
     std::chrono::milliseconds getWait() const override;
 private:
     // TBA
-}
+};
 
 #endif

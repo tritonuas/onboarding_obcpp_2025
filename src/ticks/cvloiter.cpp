@@ -4,7 +4,7 @@
 #include <chrono>
 
 CVLoiterTick::CVLoiterTick(std::shared_ptr<MissionState> state) 
-        : Tick(state, TickID::Switch) {
+        : Tick(state, TickID::CVLoiter) {
     // ^w^
     state->captureFinished = false;
 }
