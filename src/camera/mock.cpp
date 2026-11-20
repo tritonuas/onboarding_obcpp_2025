@@ -33,7 +33,8 @@ std::optional<ImageData> MockCamera::takePicture(const std::chrono::milliseconds
     // Code that randomly decided an file, and the filepath loaded into path_str
     size_t idx = static_cast<size_t>(image_index) % entries.size();
     std::string path_str = entries[idx].path().string();
-
+    // Get name of image without extensions
+    std::string img_name = entries[idx].path().stem();
     std::cout << "MockCamera: loading index " << idx << " from path: " << path_str << std::endl;
     
     // TODO: IMPLEMENT YOUR CODE HERE (to load the image)
@@ -58,6 +59,7 @@ std::optional<ImageData> MockCamera::takePicture(const std::chrono::milliseconds
 
     // TODO: IMPLEMENT YOUR CODE HERE (To set the contents of image_data)
     image_data.DATA = img;
+    image_data.filename = img_name;
     return image_data;
 
 }

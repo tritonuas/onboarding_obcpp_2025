@@ -14,7 +14,7 @@ void CameraTick::init()  {
 }
 
 Tick* CameraTick::tick() {
-    Lock lock(state->state_mut);
+    // Lock lock(state->state_mut);
     state->image = camera.takePicture(std::chrono::milliseconds(250));
     // switch to CVLoiter tick
     return new CVLoiterTick(state);

@@ -25,4 +25,6 @@ void GCSServer::_bindHandlers() {
     BIND_HANDLER(Get, status);
     BIND_HANDLER(Get, tick);
     BIND_HANDLER(Get, capture);
+    // Bind handler and define twice in hpp and cpp files
+    BIND_HANDLER(Post, message);
 }

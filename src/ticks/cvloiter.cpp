@@ -6,6 +6,7 @@
 CVLoiterTick::CVLoiterTick(std::shared_ptr<MissionState> state) 
         : Tick(state, TickID::CVLoiter) {
     // ^w^
+    Lock lock(state->state_mut);
     state->captureFinished = false;
 }
 

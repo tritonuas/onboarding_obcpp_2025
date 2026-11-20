@@ -1,5 +1,4 @@
 .vscode
 build/*
 tests/images
-images/*
-*.png
+*.jpeg
