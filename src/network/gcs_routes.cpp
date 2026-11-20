@@ -36,3 +36,26 @@ DEF_GCS_HANDLE(Get, tick) {
     response.set_content(tick_state, "text/plain");
     response.status = 200;
 }
+
+DEF_GCS_HANDLE(Get, capture) {
+    std::lock_guard<std::mutex> lock(state->state_mut);
+    // std::lock_guard<std::mutex> lock(state->image_mut);
+    std::optional<ImageData> img = state->image;
+
+    // If img has no image, set status to 501
+    if (!img.has_value()){
+        response.set_content("Image not found" "text/plain");
+        response.status = 501;
+    } else {
+        // Convert data and set flags
+        std::string b64 = cvMatToBase64(img);
+        state->has_captured = true;
+
+        // Set successful response
+        response.set_content(b64, "text/plain");
+        response.status = 200;
+    }
+
+
+
+}

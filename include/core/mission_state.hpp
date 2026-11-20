@@ -35,6 +35,7 @@ class MissionState {
 
     // Captured image
     std::optional<ImageData> image;
+    bool has_captured;
 
     // Enum to track the state of the image
     enum ImageState : int {

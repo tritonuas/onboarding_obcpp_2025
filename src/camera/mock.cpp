@@ -1,5 +1,6 @@
 #include <iostream>
 #include <filesystem>
+#include <opencv4/opencv2/opencv.hpp>
 #include "camera/mock.hpp"
 
 MockCamera::MockCamera() : CameraInterface() {
@@ -36,6 +37,14 @@ std::optional<ImageData> MockCamera::takePicture(const std::chrono::milliseconds
     std::cout << "MockCamera: loading index " << idx << " from path: " << path_str << std::endl;
     
     // TODO: IMPLEMENT YOUR CODE HERE (to load the image)
+    cv::Mat image = cv::imread(path_str);
+
+    if (image.empty()){
+        std::cout << "Image is empty" << std::endl;
+        return {};
+    }
+
+
       
     // After the image is taken
     auto now = std::chrono::steady_clock::now();
@@ -46,18 +55,22 @@ std::optional<ImageData> MockCamera::takePicture(const std::chrono::milliseconds
 
     image_index++;
     ImageData image_data;
-
+    this->last_taken = now;
     // TODO: IMPLEMENT YOUR CODE HERE (To set the contents of image_data)
+    image_data.DATA = image;
+    image_data.filename = "Big Chungus.png";
 
+    MockCamera::processCapturedImage(image_data);
     return image_data;
 }
 
 void MockCamera::startTakingPictures(const std::chrono::milliseconds& interval) {
-    return;
+    this->is_taking_pictures = true;
+    this->capture_thread = std::thread(&MockCamera::captureInterval, this, interval);
 }
 
 void MockCamera::stopTakingPictures() {
-    return;
+    this->is_taking_pictures = false;
 }
 
 void MockCamera::processCapturedImage(std::optional<ImageData> capturedImage) {
@@ -70,9 +83,16 @@ void MockCamera::processCapturedImage(std::optional<ImageData> capturedImage) {
 }
 
 int MockCamera::getImageCount() {
-    return 0;
+    WriteLock lock(this->image_lock);
+    return this->mock_images.size();
 }
 
 void MockCamera::captureInterval(const std::chrono::milliseconds& interval) {
-    return;
+    auto now = std::chrono::steady_clock::now();
+    if (std::chrono::duration_cast<std::chrono::milliseconds>(now - this->last_taken) >= interval) {
+        takePicture(std::chrono::milliseconds(DUMMY_TIMEOUT));
+    } else {
+        std::this_thread::sleep_for(std::chrono::duration_cast<std::chrono::milliseconds>(now - this->last_taken));
+    }
+
 }
