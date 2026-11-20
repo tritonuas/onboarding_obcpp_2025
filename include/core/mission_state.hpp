@@ -44,9 +44,13 @@ class MissionState {
     };
 
     ImageState image_state = ImageState::WAITING;
+    
 
     // Method to get current tick ID
     TickID getTickID();
+
+    // variable that keeps track of whether or not /capture requiest is finished
+    bool captureFinished = false;
 
 private:
     Tick* current_tick;

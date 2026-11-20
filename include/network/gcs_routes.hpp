@@ -10,5 +10,7 @@
 
 DEF_GCS_HANDLE(Get, status);
 DEF_GCS_HANDLE(Get, tick);
+DEF_GCS_HANDLE(Get, capture);
+DEF_GCS_HANDLE(Post, message);
 
 #endif  // INCLUDE_NETWORK_GCS_ROUTES_HPP_

@@ -24,4 +24,7 @@ void GCSServer::_bindHandlers() {
     // Use our macro to bind the GET /status route
     BIND_HANDLER(Get, status);
     BIND_HANDLER(Get, tick);
+    BIND_HANDLER(Get, capture);
+    // Bind handler and define twice in hpp and cpp files
+    BIND_HANDLER(Post, message);
 }
